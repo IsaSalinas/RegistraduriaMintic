@@ -8,6 +8,14 @@ regisApp = Flask(__name__) #Creamos la aplicacion de Flask
 cors = CORS(regisApp)
 
 
+#Asi le decimos que vamos a tener un endpoint
+@app.route("/", methods=['GET']) #anotacion para crear un endpoint
+    #Para la respuesta creamos una funcion.
+def home():
+    response={"message": "Welcome to academic services for G10"}
+    return jsonify(response) #coge el dicc y lo pasa a json, aunque ya no es necesario
+
+
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
