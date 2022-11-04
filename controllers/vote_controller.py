@@ -1,3 +1,6 @@
+from models.vote import Vote
+from repositories.vote_repository import VoteRepository
+
 
 class VoteController:
     # constructor
@@ -6,6 +9,7 @@ class VoteController:
         Constructor of the VoteController class
         """
         print("Vote controller ready...")
+        self.vote_repository = VoteRepository()
 
     def index(self) -> list:
         """
@@ -13,6 +17,7 @@ class VoteController:
         :return: Vote's list
         """
         print("Get all")
+        return self.vote_repository.find_all()
 
     def show(self, id_: str) -> dict:
         """
@@ -21,6 +26,7 @@ class VoteController:
         :return:
         """
         print("Show by id")
+        return self.vote_repository.find_by_id(id_)
 
     def create(self, vote_: dict) -> dict:
         """
@@ -30,6 +36,8 @@ class VoteController:
         """
 
         print("Insert")
+        vote = Vote(vote_)
+        return self.vote_repository.save(vote)
 
     def update(self, id_: str, vote_: dict) -> dict:
         """
@@ -39,6 +47,9 @@ class VoteController:
         :return:
         """
         print("Update by id")
+        vote = Vote(vote_)
+        return self.vote_repository.update(id_, vote)
+
 
     def delete (self, id_: str ,) -> str:
         """
@@ -47,3 +58,4 @@ class VoteController:
         :return:
         """
         print("Delete by id")
+        return self.vote_repository.delete(id_)
