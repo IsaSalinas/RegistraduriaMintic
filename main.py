@@ -1,28 +1,38 @@
 import json
 from flask import Flask
-from flask import jsonify # coge un dicc y lo pasa a json
+from flask import jsonify
 from flask_cors import CORS
 from waitress import serve
 
-regisApp = Flask(__name__) #Creamos la aplicacion de Flask
+from blueprints.candidate_blueprints import candidate_blueprints
+from blueprints.political_party_blueprints import political_party_blueprints
+from blueprints.vote_blueprints import vote_blueprints
+from blueprints.table_blueprints import table_blueprints
+
+regisApp = Flask(__name__)
 cors = CORS(regisApp)
 
+regisApp.register_blueprint(political_party_blueprints)
+regisApp.register_blueprint(candidate_blueprints)
+regisApp.register_blueprint(vote_blueprints)
+regisApp.register_blueprint(table_blueprints)
 
-#Asi le decimos que vamos a tener un endpoint
-@app.route("/", methods=['GET']) #anotacion para crear un endpoint
-    #Para la respuesta creamos una funcion.
+
+@regisApp.route("/", methods=['GET'])
+
 def home():
-    response={"message": "Welcome to academic services for G10"}
-    return jsonify(response) #coge el dicc y lo pasa a json, aunque ya no es necesario
+    response={"message": "Welcome to Registraduria MINTIC"}
+    return jsonify(response)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+#=========Config and Execution code===============
+def load_file_config():
+    with open("config.json", "r") as config:
+        data = json.load(config)
+    return data
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    data_config = load_file_config()
+    print("Server running: http://" + data_config.get('url-backend') + ":" + str(data_config.get('port')))
+    serve(regisApp, host=data_config.get('url-backend'), port=data_config.get('port'))
