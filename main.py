@@ -4,6 +4,11 @@ from flask import jsonify
 from flask_cors import CORS
 from waitress import serve
 
+from blueprints.candidate_blueprints import candidate_blueprints
+from blueprints.political_party_blueprints import political_party_blueprints
+from blueprints.vote_blueprints import vote_blueprints
+from blueprints.table_blueprints import table_blueprints
+
 regisApp = Flask(__name__)
 cors = CORS(regisApp)
 
