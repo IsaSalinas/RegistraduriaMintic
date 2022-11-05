@@ -100,14 +100,13 @@ class InterfaceRepository(Generic [T]):
             dataset.append(document)
         return dataset
 
-""" #Pendiente Verificar - Marca Error
     def get_values_db_ref(self, document: dict)->dict:
         for key in document.keys():
             #value = document.get.(key)
             if isinstance(document.get(key), DBRef):
-                collection_ref = self.data_base[(document.get(key).collection]
-                _id = ObjectId(document.get(key).id)
-                document_ref = collection_ref.find({'_id': _id})
+                collection_ref = self.data_base[(document.get(key)).collection]
+
+                document_ref = collection_ref.find_one({'_id' : ObjectId(document.get(key)).id})
                 document_ref['_id'] = document_ref['_id'].__str__()
                 document[key]=document_ref
                 document[key]=self.get_values_db_ref(document[key])
@@ -116,7 +115,7 @@ class InterfaceRepository(Generic [T]):
             elif isinstance(document.get(key), dict):
                 document[key]= self.get_values_db_ref(document.get(key))
         return document
-        """
+
 
 
     def get_values_db_ref_from_list(self, list_:list)-> list:
