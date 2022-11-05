@@ -1,8 +1,0 @@
-{
-  "url-backend":"127.0.0.1",
-  "port": 8081,
-  "db_name":"backend_results",
-  "db_connection":
-    "mongodb+srv://jjrios:P4$$w0rd123@misiontic2022.gmr1yap.mongodb.net/backend_results?retryWrites=true&w=majority",
-
-}
