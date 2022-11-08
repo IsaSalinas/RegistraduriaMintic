@@ -42,28 +42,30 @@ class InterfaceRepository(Generic [T]):
         current_collection = self.data_base[self.collection]
         _id = ObjectId(id_)
         document = current_collection.find_one({'_id' : _id})
-        document = self.get_values.db_ref(document)
+        document = self.get_values_db_ref(document)
         if document:
-            document['_id'] = document['id'].__str__()
+            document['_id'] = document['_id'].__str__()
         else:
             document = {}
         return document
 
-
-    def save(self, item:T)->T:
-        current_collection=self.data_base[self.collection]
+    def save(self, item: T) -> T:
+        current_collection = self.data_base[self.collection]
         item = self.transform_refs(item)
         if hasattr(item, '_id') and item._id != "":
             id_ = item._id
             _id = ObjectId(id_)
             delattr(item, '_id')
             item = item.__dict__
-            updated_item = {"$set":item}
-            current_collection.update_one({'_id':_id}, updated_item)
+            updated_item = {"$set": item}
+            current_collection.update_one({'_id': _id}, updated_item)
         else:
             #insert
             _id = current_collection.insert_one(item.__dict__)
             id_ = _id.inserted_id.__str__()
+            x = current_collection.find_one({"_id": ObjectId(id_)})
+            x["_id"] = x["_id"].__str__()
+
         return self.find_by_id(id_)
 
 
@@ -94,7 +96,7 @@ class InterfaceRepository(Generic [T]):
         return dataset
 
     #TODO add to function to process result list and use here and in find
-    def query_aggregation(self, query:dict)-> dict:
+    def query_aggregation(self, query: dict) -> dict:
         current_collection = self.data_base[self.collection]
         dataset = []
         for document in current_collection.aggregate(query):
@@ -109,17 +111,15 @@ class InterfaceRepository(Generic [T]):
             #value = document.get.(key)
             if isinstance(document.get(key), DBRef):
                 collection_ref = self.data_base[(document.get(key)).collection]
-
-                document_ref = collection_ref.find_one({'_id' : ObjectId(document.get(key)).id})
+                document_ref = collection_ref.find_one({'_id': ObjectId(document.get(key)).id})
                 document_ref['_id'] = document_ref['_id'].__str__()
                 document[key] = document_ref
                 document[key] = self.get_values_db_ref(document[key])
-            elif isinstance(document.get(key), list) and len(document.get(key))>0:
+            elif isinstance(document.get(key), list) and len(document.get(key)) > 0:
                 document[key] = self.get_values_db_ref_list(document.get(key))
             elif isinstance(document.get(key), dict):
                 document[key] = self.get_values_db_ref(document.get(key))
         return document
-
 
     def get_values_db_ref_from_list(self, list_: list) -> list:
         processed_list = []
@@ -132,38 +132,36 @@ class InterfaceRepository(Generic [T]):
             processed_list.append(document_ref)
         return processed_list
 
-    def transform_object_ids(self, document:dict) ->dict:
+    def transform_object_ids(self, document: dict) -> dict:
         for key in document.keys():
             value = document.get(key)
             if isinstance(value, ObjectId):
                 document[key] = document[key].__str__()
-            elif isinstance(value, list) and len(value) >0:
+            elif isinstance(value, list) and len(value) > 0:
                 document[key] = self.format_list(value)
             elif isinstance(value, dict):
                 document[key]=self.transform_object_ids(value)
         return document
 
-
-    def format_list(self, list_:list)->list:
+    def format_list(self, list_: list) -> list:
         processed_list =[]
         for item in list_:
             if isinstance(item, ObjectId):
                 temp=item.__str__()
                 processed_list.append(temp)
-        if len(processed_list)==0:
+        if len(processed_list) == 0:
             #if not processed_list, es otra forma de decir
-            processed_list=list_
+            processed_list = list_
         return processed_list
 
-
-    def transform_refs(self, item:T)->T:
+    def transform_refs(self, item: T) -> T:
         item_dict = item.__dict__
         for key in item_dict.keys():
-            if item.dict.get(key).__str__().count("object")==1:
-                object_=self.object_to_db_ref(getattr(item, key))
+            if item_dict.get(key).__str__().count("object") == 1:
+                object_ = self.object_to_db_ref(getattr(item, key))
+                setattr(item, key, object_)
         return item
 
-
-    def object_to_db_ref(self, item_ref:T)->DBRef:
-        collection_ref = item_ref.__class__.__name.lower()
-        return DBRef(collection_ref,ObjectId(item_ref._id))
+    def object_to_db_ref(self, item_ref: T) -> DBRef:
+        collection_ref = item_ref.__class__.__name__.lower()
+        return DBRef(collection_ref, ObjectId(item_ref._id))

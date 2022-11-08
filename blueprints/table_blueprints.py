@@ -24,3 +24,16 @@ def insert_table():
     table = request.get_json()
     response = table_controller.create(table)
     return response, 201
+
+
+@table_blueprints.route("/table/update/<string:id_>", methods=['PACTH'])
+def update_table(id_):
+    table = request.get_json()
+    response = table_controller.update(id_, table)
+    return response, 201
+
+
+@table_blueprints.route("/table/delete/<string:id_>", methods=['DELETE'])
+def delete_table(id_):
+    response = table_controller.delete(id_)
+    return response, 204
