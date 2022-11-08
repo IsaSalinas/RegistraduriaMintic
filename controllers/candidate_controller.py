@@ -1,5 +1,7 @@
 from models.candidate import Candidate
 from repositories.candidate_repository import CandidateRepository
+
+
 class CandidateController:
     # constructor
     def __init__(self):

@@ -6,65 +6,69 @@ from bson import ObjectId, DBRef
 from typing import Generic, TypeVar, get_args
 
 
-T = TypeVar ('T')
+T = TypeVar('T')
 
 # TODO add dta validations and error control
-class InterfaceRepository(Generic [T]):
+
+
+class InterfaceRepository(Generic[T]):
     def __init__(self):
         #connect db
 
-
-        ca= certifi.where()
-        data_config = self.load_file.config()
-        client= pymongo.MongoClient(
+        ca = certifi.where()
+        data_config = self.load_file_config()
+        client = pymongo.MongoClient(
             data_config.get("db_connection"),
             tlsCAFile=ca
         )
-        self.data_base=client[data_config.get("db_name")]
-        model_class =get_args(self.__origin__bases__[0])
-        self.collection=model_class[0].__name__.lower()
+        self.data_base = client[data_config.get("db_name")]
+        model_class = get_args(self.__orig__bases__[0])
+        self.collection = model_class[0].__name__.lower()
 
-    def find_all (self) -> list:
-        current_collection=self.data_base[self.collection]
-        dataset=[]
+    def load_file_config(self):
+        with open("config.json", "r") as config:
+            data = json.load(config)
+        return data
+
+    def find_all(self) -> list:
+        current_collection = self.data_base[self.collection]
+        dataset = []
         for document in current_collection.find({}):
-            document['_id']=document['_id'].__str__()
-            document= self.transform_object_ids(document)
-            document= self.get_values_db_ref(document)
+            document['_id'] = document['_id'].__str__()
+            document = self.transform_object_ids(document)
+            document = self.get_values_db_ref(document)
             dataset.append(document)
         return dataset
 
-
-    def find_by_id(self, id_:str) ->dict:
-        current_collection=self.data_base[self.collection]
-        _id=ObjectId(id_)
-        document=current_collection.find_one({'_id':_id})
-        document=self.get_values.db_ref(document)
+    def find_by_id(self, id_:str) -> dict:
+        current_collection = self.data_base[self.collection]
+        _id = ObjectId(id_)
+        document = current_collection.find_one({'_id':_id})
+        document = self.get_values.db_ref(document)
         if document:
             document['_id']=document['id'].__str__()
         else:
-            document={}
+            document = {}
 
-
-    def save(self, item:T)->T:
-        current_collection=self.data_base[self.collection]
-        item=self.transform_refs(item)
+    def save(self, item:T) -> T:
+        current_collection = self.data_base[self.collection]
+        item = self.transform_refs(item)
         if hasattr(item, '_id') and item._id != "":
-            id_=item._id
-            _id=ObjectId(id_)
+            id_ = item._id
+            _id = ObjectId(id_)
             delattr(item, '_id')
             item = item.__dict__
             updated_item = {"$set":item}
-            current_collection.update_one({'_id':_id}, updated_item)
+            current_collection.update_one({'_id': _id}, updated_item)
         else:
             #insert
             _id = current_collection.insert_one(item.__dict__)
             id_ = _id.inserted_id.__str__()
         return self.find_by_id(id_)
 
-
     # TODO check if this function could be replaced by save
-    def update(self, id_:str, item:T)->dict:
+
+    def update(self, id_:str, item:T) -> dict:
         current_collection = self.data_base[self.collection]
         _id = ObjectId(id_)
         item = item.__dict__
@@ -72,14 +76,14 @@ class InterfaceRepository(Generic [T]):
         document = current_collection.update_one({'_id':_id}, updated_item)
         return{ "updated_count": document.matched_count}
 
-    def delete(self, id_:str)->dict:
+    def delete(self, id_:str) -> dict:
         current_collection = self.data_base[self.collection]
         _id = ObjectId(id_)
         result = current_collection.delete_one({'_id':_id})
         return {"delete_count": result.deleted_count}
 
     # TODO check if this could replace  by find_all
-    def query(self, query:dict)-> list:
+    def query(self, query:dict) -> list:
         current_collection = self.data_base[self.collection]
         dataset = []
         for document in current_collection.find(query): #igual que el find all, pero le pasamos el query que es un diccionario de un campo y un valor
@@ -115,8 +119,6 @@ class InterfaceRepository(Generic [T]):
             elif isinstance(document.get(key), dict):
                 document[key]= self.get_values_db_ref(document.get(key))
         return document
-
-
 
     def get_values_db_ref_from_list(self, list_:list)-> list:
         processed_list = []
