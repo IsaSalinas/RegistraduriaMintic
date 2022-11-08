@@ -12,46 +12,50 @@ T = TypeVar ('T')
 class InterfaceRepository(Generic [T]):
     def __init__(self):
         #connect db
-
-
-        ca= certifi.where()
-        data_config = self.load_file.config()
-        client= pymongo.MongoClient(
+        ca = certifi.where()
+        data_config = self.load_file_config()
+        client = pymongo.MongoClient(
             data_config.get("db_connection"),
             tlsCAFile=ca
         )
-        self.data_base=client[data_config.get("db_name")]
-        model_class =get_args(self.__origin__bases__[0])
-        self.collection=model_class[0].__name__.lower()
+        self.data_base = client[data_config.get("db_name")]
+        model_class = get_args(self.__orig_bases__[0])
+        self.collection = model_class[0].__name__.lower()
 
-    def find_all (self) -> list:
-        current_collection=self.data_base[self.collection]
-        dataset=[]
+    def load_file_config(self):
+        with open("config.json", "r") as config:
+            data = json.load(config)  # Carga el json de config y lo pasa a un dicc
+        return data
+
+    def find_all(self) -> list:
+        current_collection = self.data_base[self.collection]
+        dataset = []
         for document in current_collection.find({}):
-            document['_id']=document['_id'].__str__()
-            document= self.transform_object_ids(document)
-            document= self.get_values_db_ref(document)
+            document['_id'] = document['_id'].__str__()
+            document = self.transform_object_ids(document)
+            document = self.get_values_db_ref(document)
             dataset.append(document)
         return dataset
 
 
     def find_by_id(self, id_:str) ->dict:
-        current_collection=self.data_base[self.collection]
-        _id=ObjectId(id_)
-        document=current_collection.find_one({'_id':_id})
-        document=self.get_values.db_ref(document)
+        current_collection = self.data_base[self.collection]
+        _id = ObjectId(id_)
+        document = current_collection.find_one({'_id' : _id})
+        document = self.get_values.db_ref(document)
         if document:
-            document['_id']=document['id'].__str__()
+            document['_id'] = document['id'].__str__()
         else:
-            document={}
+            document = {}
+        return document
 
 
     def save(self, item:T)->T:
         current_collection=self.data_base[self.collection]
-        item=self.transform_refs(item)
+        item = self.transform_refs(item)
         if hasattr(item, '_id') and item._id != "":
-            id_=item._id
-            _id=ObjectId(id_)
+            id_ = item._id
+            _id = ObjectId(id_)
             delattr(item, '_id')
             item = item.__dict__
             updated_item = {"$set":item}
@@ -75,11 +79,11 @@ class InterfaceRepository(Generic [T]):
     def delete(self, id_:str)->dict:
         current_collection = self.data_base[self.collection]
         _id = ObjectId(id_)
-        result = current_collection.delete_one({'_id':_id})
+        result = current_collection.delete_one({'_id': _id})
         return {"delete_count": result.deleted_count}
 
     # TODO check if this could replace  by find_all
-    def query(self, query:dict)-> list:
+    def query(self, query: dict) -> list:
         current_collection = self.data_base[self.collection]
         dataset = []
         for document in current_collection.find(query): #igual que el find all, pero le pasamos el query que es un diccionario de un campo y un valor
@@ -100,7 +104,7 @@ class InterfaceRepository(Generic [T]):
             dataset.append(document)
         return dataset
 
-    def get_values_db_ref(self, document: dict)->dict:
+    def get_values_db_ref(self, document: dict) -> dict:
         for key in document.keys():
             #value = document.get.(key)
             if isinstance(document.get(key), DBRef):
@@ -108,17 +112,16 @@ class InterfaceRepository(Generic [T]):
 
                 document_ref = collection_ref.find_one({'_id' : ObjectId(document.get(key)).id})
                 document_ref['_id'] = document_ref['_id'].__str__()
-                document[key]=document_ref
-                document[key]=self.get_values_db_ref(document[key])
+                document[key] = document_ref
+                document[key] = self.get_values_db_ref(document[key])
             elif isinstance(document.get(key), list) and len(document.get(key))>0:
                 document[key] = self.get_values_db_ref_list(document.get(key))
             elif isinstance(document.get(key), dict):
-                document[key]= self.get_values_db_ref(document.get(key))
+                document[key] = self.get_values_db_ref(document.get(key))
         return document
 
 
-
-    def get_values_db_ref_from_list(self, list_:list)-> list:
+    def get_values_db_ref_from_list(self, list_: list) -> list:
         processed_list = []
         collection_ref = self.data_base[list_[0]._id.collection]
         for item in list_:
@@ -131,11 +134,11 @@ class InterfaceRepository(Generic [T]):
 
     def transform_object_ids(self, document:dict) ->dict:
         for key in document.keys():
-            value =document.get(key)
+            value = document.get(key)
             if isinstance(value, ObjectId):
-                document[key]= document[key].__str__()
+                document[key] = document[key].__str__()
             elif isinstance(value, list) and len(value) >0:
-                document[key]= self.format_list(value)
+                document[key] = self.format_list(value)
             elif isinstance(value, dict):
                 document[key]=self.transform_object_ids(value)
         return document
