@@ -1,5 +1,8 @@
 from models.candidate import Candidate
+from models.political_party import PoliticalParty
 from repositories.candidate_repository import CandidateRepository
+from repositories.political_party_repository import PoliticalParty
+
 class CandidateController:
     # constructor
     def __init__(self):
@@ -57,3 +60,9 @@ class CandidateController:
         """
         print("Delete by id")
         return self.candidate_repository.delete(id_)
+
+    def political_party_assign(self, candidate_id: str, political_party_id: str) -> dict:
+        candidate = self.candidate_repository.find_by_id(candidate_id)
+        political_party = self.political_party.repository.find_by_id(political_party_id)
+        candidate.political_party = political_party
+        return self.candidate_repository.save(candidate)
