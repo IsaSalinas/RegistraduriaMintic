@@ -33,9 +33,8 @@ def update_table(id_):
     return response, 201
 
 
-@vote_blueprints.route("/vote/update/<string:id_>", methods=['DELETE'])
+@vote_blueprints.route("/vote/delete/<string:id_>", methods=['DELETE'])
 def delete_table(id_):
-    vote = request.get_json()
     response = vote_controller.delete(id_)
     return response, 204
 

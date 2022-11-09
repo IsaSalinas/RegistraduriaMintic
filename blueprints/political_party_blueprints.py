@@ -26,15 +26,14 @@ def insert_political_party():
     return response, 201
 
 
-@political_party_blueprints.route("/political_party/update/<string:id_>", methods=['PACTH'])
+@political_party_blueprints.route("/political_party/update/<string:id_>", methods=['PATCH'])
 def update_political_party(id_):
     political_party = request.get_json()
     response = political_party_controller.update(id_, political_party)
     return response, 201
 
 
-@political_party_blueprints.route("/political_party/update/<string:id_>", methods=['DELETE'])
+@political_party_blueprints.route("/political_party/delete/<string:id_>", methods=['DELETE'])
 def delete_political_party(id_):
-    political_party = request.get_json()
     response = political_party_controller.delete(id_)
     return response, 204

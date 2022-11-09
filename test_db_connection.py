@@ -3,7 +3,7 @@ import certifi
 
 ca = certifi.where()
 client = pymongo.MongoClient(
-    "mongodb+srv://jjrios:<P4$$w0rd123>@misiontic2022.gmr1yap.mongodb.net/backend_results?retryWrites=true&w=majority",
+    "mongodb+srv://jjrios:P4$$w0rd123@misiontic2022.gmr1yap.mongodb.net/backend_results?retryWrites=true&w=majority",
     tlsCAFile=ca
 )
 

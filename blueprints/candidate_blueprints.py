@@ -26,15 +26,13 @@ def insert_candidate():
     return response, 201
 
 
-@candidate_blueprints.route("/candidate/update/<string:id_>", methods=['PACTH'])
+@candidate_blueprints.route("/candidate/update/<string:id_>", methods=['PATCH'])
 def update_candidate(id_):
     candidate = request.get_json()
     response = candidate_controller.update(id_, candidate)
     return response, 201
 
-
-@candidate_blueprints.route("/candidate/update/<string:id_>", methods=['DELETE'])
+@candidate_blueprints.route("/candidate/delete/<string:id_>", methods=['DELETE'])
 def delete_candidate(id_):
-    candidate = request.get_json()
     response = candidate_controller.delete(id_)
     return response, 204
