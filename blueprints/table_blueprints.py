@@ -26,7 +26,7 @@ def insert_table():
     return response, 201
 
 
-@table_blueprints.route("/table/update/<string:id_>", methods=['PACTH'])
+@table_blueprints.route("/table/update/<string:id_>", methods=['PATCH'])
 def update_table(id_):
     table = request.get_json()
     response = table_controller.update(id_, table)

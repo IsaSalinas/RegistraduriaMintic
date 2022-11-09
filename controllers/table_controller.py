@@ -47,7 +47,7 @@ class TableController:
         """
         print("Update by id")
         table = Table(table_)
-        return self.table.update(id_, table)
+        return self.table_repository.update(id_, table)
 
     def delete(self, id_: str, ) -> str:
         """
