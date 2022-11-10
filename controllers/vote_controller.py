@@ -1,5 +1,9 @@
 from models.vote import Vote
 from repositories.vote_repository import VoteRepository
+from models.table import Table
+from models.candidate import Candidate
+from repositories.table_repository import TableRepository
+from repositories.candidate_repository import CandidateRepository
 
 
 class VoteController:
@@ -10,6 +14,8 @@ class VoteController:
         """
         print("Vote controller ready...")
         self.vote_repository = VoteRepository()
+        self.table_repository = TableRepository()
+        self.candidate_Repository = CandidateRepository()
 
     def index(self) -> list:
         """

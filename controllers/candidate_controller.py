@@ -62,7 +62,10 @@ class CandidateController:
         return self.candidate_repository.delete(id_)
 
     def political_party_assign(self, candidate_id: str, political_party_id: str) -> dict:
-        candidate = self.candidate_repository.find_by_id(candidate_id)
-        political_party = self.political_party.repository.find_by_id(political_party_id)
-        candidate.political_party = political_party
-        return self.candidate_repository.save(candidate)
+        candidate_dict = self.candidate_repository.find_by_id(candidate_id)
+        candidate_obj = Candidate(candidate_dict)
+        political_party_dict = self.political_party_repository.find_by_id(political_party_id)
+
+        political_party_obj = PoliticalParty(political_party_dict)
+        candidate_obj.department = political_party_obj
+        return self.candidate_repository.save(candidate_obj)
