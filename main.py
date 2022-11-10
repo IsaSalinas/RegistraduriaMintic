@@ -36,4 +36,3 @@ if __name__ == '__main__':
     data_config = load_file_config()
     print("Server running: http://" + data_config.get('url-backend') + ":" + str(data_config.get('port')))
     serve(regisApp, host=data_config.get('url-backend'), port=data_config.get('port'))
-
