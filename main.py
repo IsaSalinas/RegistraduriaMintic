@@ -19,13 +19,12 @@ regisApp.register_blueprint(table_blueprints)
 
 
 @regisApp.route("/", methods=['GET'])
-
 def home():
-    response={"message": "Welcome to Registraduria MINTIC"}
+    response = {"message": "Welcome to Registraduria MINTIC"}
     return jsonify(response)
 
 
-#=========Config and Execution code===============
+# =========Config and Execution code===============
 def load_file_config():
     with open("config.json", "r") as config:
         data = json.load(config)
@@ -36,3 +35,4 @@ if __name__ == '__main__':
     data_config = load_file_config()
     print("Server running: http://" + data_config.get('url-backend') + ":" + str(data_config.get('port')))
     serve(regisApp, host=data_config.get('url-backend'), port=data_config.get('port'))
+    
