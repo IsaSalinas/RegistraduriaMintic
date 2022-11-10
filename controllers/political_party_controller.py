@@ -30,7 +30,6 @@ class PoliticalPartyController:
 
     def create(self, political_party_: dict) -> dict:
         """
-
         :param political_party_:
         :return:
         """
@@ -41,7 +40,6 @@ class PoliticalPartyController:
 
     def update(self, id_: str, political_party_: dict) -> dict:
         """
-
         :param id_:
         :param political_party_:
         :return:
@@ -52,9 +50,10 @@ class PoliticalPartyController:
 
     def delete(self, id_: str, ) -> str:
         """
-
         :param id_:
         :return:
         """
         print("Delete by id")
+        return self.political_party_repository.delete(id_)
+
         return self.political_party_repository.delete(id_)

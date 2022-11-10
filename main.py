@@ -1,6 +1,6 @@
 import json
 from flask import Flask
-from flask import jsonify
+from flask import jsonify # coge un dicc y lo pasa a json
 from flask_cors import CORS
 from waitress import serve
 
@@ -19,20 +19,20 @@ regisApp.register_blueprint(table_blueprints)
 
 
 @regisApp.route("/", methods=['GET'])
-
 def home():
-    response={"message": "Welcome to Registraduria MINTIC"}
+    response = {"message": "Welcome to Registraduria MINTIC"}
     return jsonify(response)
 
 
-#=========Config and Execution code===============
+# =========Config and Execution code===============
 def load_file_config():
     with open("config.json", "r") as config:
         data = json.load(config)
     return data
 
-
+     #Variable interna que hace referencia al nombre del proyecto
 if __name__ == '__main__':
-    data_config = load_file_config()
+    data_config = load_file_config() #Guarda lo que retorna la funcion, la version en diccionario del Json
     print("Server running: http://" + data_config.get('url-backend') + ":" + str(data_config.get('port')))
     serve(regisApp, host=data_config.get('url-backend'), port=data_config.get('port'))
+

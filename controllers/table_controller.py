@@ -20,7 +20,6 @@ class TableController:
 
     def show(self, id_: str) -> dict:
         """
-
         :param id_:
         :return:
         """
@@ -29,7 +28,6 @@ class TableController:
 
     def create(self, table_: dict) -> dict:
         """
-
         :param table_:
         :return:
         """
@@ -40,7 +38,6 @@ class TableController:
 
     def update(self, id_: str, table_: dict) -> dict:
         """
-
         :param id_:
         :param table_:
         :return:
@@ -51,9 +48,10 @@ class TableController:
 
     def delete(self, id_: str, ) -> str:
         """
-
         :param id_:
         :return:
         """
         print("Delete by id")
+        return self.table_repository.delete(id_)
+
         return self.table_repository.delete(id_)
