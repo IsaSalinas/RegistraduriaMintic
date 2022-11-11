@@ -8,6 +8,7 @@ from blueprints.candidate_blueprints import candidate_blueprints
 from blueprints.political_party_blueprints import political_party_blueprints
 from blueprints.vote_blueprints import vote_blueprints
 from blueprints.table_blueprints import table_blueprints
+from blueprints.report_blueprints import report_blueprints
 
 regisApp = Flask(__name__)
 cors = CORS(regisApp)
@@ -16,7 +17,7 @@ regisApp.register_blueprint(political_party_blueprints)
 regisApp.register_blueprint(candidate_blueprints)
 regisApp.register_blueprint(vote_blueprints)
 regisApp.register_blueprint(table_blueprints)
-
+regisApp.register_blueprint(report_blueprints)
 
 @regisApp.route("/", methods=['GET'])
 def home():

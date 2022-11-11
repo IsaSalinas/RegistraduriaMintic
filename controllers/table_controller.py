@@ -2,7 +2,6 @@ from models.table import Table
 from repositories.table_repository import TableRepository
 
 class TableController:
-    # constructor
     def __init__(self):
         """
         Constructor of the TableController class

@@ -3,7 +3,6 @@ from repositories.political_party_repository import PoliticalPartyRepository
 
 
 class PoliticalPartyController:
-    # constructor
     def __init__(self):
         """
         Constructor of the PoliticalPartyController class
@@ -35,8 +34,8 @@ class PoliticalPartyController:
         """
 
         print("Insert")
-        political_party_ = PoliticalParty(political_party_)
-        return self.political_party_repository.save(political_party_)
+        political_party = PoliticalParty(political_party_)
+        return self.political_party_repository.save(political_party)
 
     def update(self, id_: str, political_party_: dict) -> dict:
         """
@@ -54,6 +53,4 @@ class PoliticalPartyController:
         :return:
         """
         print("Delete by id")
-        return self.political_party_repository.delete(id_)
-
         return self.political_party_repository.delete(id_)

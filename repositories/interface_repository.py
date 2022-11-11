@@ -2,14 +2,12 @@ import json
 import certifi
 import pymongo
 from bson import ObjectId, DBRef
+from typing import Generic, TypeVar, get_args, get_origin
 
-from typing import Generic, TypeVar, get_args
-
-
-T = TypeVar ('T')
+T = TypeVar('T')
 
 # TODO add dta validations and error control
-class InterfaceRepository(Generic [T]):
+class InterfaceRepository(Generic[T]):
     def __init__(self):
         #connect db
         ca = certifi.where()
@@ -22,7 +20,7 @@ class InterfaceRepository(Generic [T]):
         model_class = get_args(self.__orig_bases__[0])
         self.collection = model_class[0].__name__.lower()
 
-    def load_file_config(self):
+    def load_file_config(self) -> dict:
         with open("config.json", "r") as config:
             data = json.load(config)  # Carga el json de config y lo pasa a un dicc
         return data
@@ -60,7 +58,6 @@ class InterfaceRepository(Generic [T]):
             updated_item = {"$set": item}
             current_collection.update_one({'_id': _id}, updated_item)
         else:
-            #insert
             _id = current_collection.insert_one(item.__dict__)
             id_ = _id.inserted_id.__str__()
             x = current_collection.find_one({"_id": ObjectId(id_)})
@@ -70,15 +67,15 @@ class InterfaceRepository(Generic [T]):
 
 
     # TODO check if this function could be replaced by save
-    def update(self, id_:str, item:T)->dict:
+    def update(self, id_: str, item: T) -> dict:
         current_collection = self.data_base[self.collection]
         _id = ObjectId(id_)
         item = item.__dict__
         updated_item = {"$set":item}
-        document = current_collection.update_one({'_id':_id}, updated_item)
+        document = current_collection.update_one({'_id': _id}, updated_item)
         return{ "updated_count": document.matched_count}
 
-    def delete(self, id_:str)->dict:
+    def delete(self, id_: str) -> dict:
         current_collection = self.data_base[self.collection]
         _id = ObjectId(id_)
         result = current_collection.delete_one({'_id': _id})
@@ -96,7 +93,7 @@ class InterfaceRepository(Generic [T]):
         return dataset
 
     #TODO add to function to process result list and use here and in find
-    def query_aggregation(self, query: dict) -> dict:
+    def query_aggregation(self, query: dict) -> list:
         current_collection = self.data_base[self.collection]
         dataset = []
         for document in current_collection.aggregate(query):
@@ -116,7 +113,7 @@ class InterfaceRepository(Generic [T]):
                 document[key] = document_ref
                 document[key] = self.get_values_db_ref(document[key])
             elif isinstance(document.get(key), list) and len(document.get(key)) > 0:
-                document[key] = self.get_values_db_ref_list(document.get(key))
+                document[key] = self.get_values_db_ref_from_list(document.get(key))
             elif isinstance(document.get(key), dict):
                 document[key] = self.get_values_db_ref(document.get(key))
         return document
@@ -126,8 +123,8 @@ class InterfaceRepository(Generic [T]):
         collection_ref = self.data_base[list_[0]._id.collection]
         for item in list_:
             _id = ObjectId(item._id)
-            document_ref = collection_ref.find_one({'_id':_id})
-            document_ref['_id']= document_ref['_id'].__str__()
+            document_ref = collection_ref.find_one({'_id': _id})
+            document_ref['_id'] = document_ref['_id'].__str__()
             # TODO check if in this point each document:ref needs to call get_values_db_ref
             processed_list.append(document_ref)
         return processed_list
@@ -140,14 +137,14 @@ class InterfaceRepository(Generic [T]):
             elif isinstance(value, list) and len(value) > 0:
                 document[key] = self.format_list(value)
             elif isinstance(value, dict):
-                document[key]=self.transform_object_ids(value)
+                document[key] = self.transform_object_ids(value)
         return document
 
     def format_list(self, list_: list) -> list:
-        processed_list =[]
+        processed_list = []
         for item in list_:
             if isinstance(item, ObjectId):
-                temp=item.__str__()
+                temp = item.__str__()
                 processed_list.append(temp)
         if len(processed_list) == 0:
             #if not processed_list, es otra forma de decir

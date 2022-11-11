@@ -7,7 +7,6 @@ from repositories.candidate_repository import CandidateRepository
 
 
 class VoteController:
-    # constructor
     def __init__(self):
         """
         Constructor of the VoteController class
@@ -16,9 +15,6 @@ class VoteController:
         self.vote_repository = VoteRepository()
         self.table_repository = TableRepository()
         self.candidate_Repository = CandidateRepository()
-        self.vote_repository = VoteRepository()
-        self.candidate_repository = CandidateRepository()
-        self.table_repository = TableRepository()
 
     def index(self) -> list:
         """
@@ -36,7 +32,6 @@ class VoteController:
         """
         print("Show by id")
         return self.vote_repository.find_by_id(id_)
-        return self.vote_repository.find_by_id(id_)
 
     def get_by_candidate(self, candidate_id: str) -> list:
         """
@@ -44,7 +39,23 @@ class VoteController:
         :param candidate_id:
         :return:
         """
-        return self.vote_repository.get_tables_in_candidates(candidate_id)
+        return self.vote_repository.get_votes_in_candidate(candidate_id)
+
+    def get_by_political_party(self, political_party_id: str) -> list:
+        """
+
+        :param political_party_id:
+        :return:
+        """
+        return self.vote_repository.get_votes_in_political_party(political_party_id)
+
+    def get_by_table(self, table_id: str) -> list:
+        """
+
+        :param table_id:
+        :return:
+        """
+        return self.vote_repository.get_votes_in_table(table_id)
 
     def create(self, vote_: dict, candidate_id: str, table_id: str) -> dict:
         """
@@ -56,8 +67,6 @@ class VoteController:
         """
 
         print("Insert")
-        vote = Vote(vote_)
-        return self.vote_repository.save(vote)
         vote = Vote(vote_)
         candidate_dict = self.candidate_repository.find_by_id(candidate_id)
         candidate_obj = Candidate(candidate_dict)
@@ -88,5 +97,4 @@ class VoteController:
         :return:
         """
         print("Delete by id")
-        return self.vote_repository.delete(id_)
         return self.vote_repository.delete(id_)
