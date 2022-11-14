@@ -105,17 +105,18 @@ class InterfaceRepository(Generic[T]):
 
     def get_values_db_ref(self, document: dict) -> dict:
         for key in document.keys():
-            #value = document.get.(key)
-            if isinstance(document.get(key), DBRef):
-                collection_ref = self.data_base[(document.get(key)).collection]
-                document_ref = collection_ref.find_one({'_id': ObjectId(document.get(key)).id})
+            value = document.get(key)
+            if isinstance(value, DBRef):
+                collection_ref = self.data_base[value.collection]
+                _id = ObjectId(value.id)
+                document_ref = collection_ref.find_one({'_id': _id})
                 document_ref['_id'] = document_ref['_id'].__str__()
                 document[key] = document_ref
                 document[key] = self.get_values_db_ref(document[key])
-            elif isinstance(document.get(key), list) and len(document.get(key)) > 0:
-                document[key] = self.get_values_db_ref_from_list(document.get(key))
-            elif isinstance(document.get(key), dict):
-                document[key] = self.get_values_db_ref(document.get(key))
+            elif isinstance(value, list) and len (value) > 0:
+                document[key] = self.get_values_db_ref_from_list(value)
+            elif isinstance(value, dict):
+                document[key] = self.get_values_db_ref(value)
         return document
 
     def get_values_db_ref_from_list(self, list_: list) -> list:

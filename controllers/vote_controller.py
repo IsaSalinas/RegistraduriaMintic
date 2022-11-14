@@ -82,10 +82,7 @@ class VoteController:
         vote = Vote(vote_)
         return self.vote_repository.update(id_, vote)
 
-        vote = Vote(vote_)
-        return self.vote_repository.update(id_, vote)
-
-    def delete (self, id_: str,) -> str:
+    def delete(self, id_: str,) -> str:
         """
 
         :param id_:
