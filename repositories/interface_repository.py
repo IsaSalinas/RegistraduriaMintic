@@ -22,7 +22,7 @@ class InterfaceRepository(Generic[T]):
 
     def load_file_config(self) -> dict:
         with open("config.json", "r") as config:
-            data = json.load(config)  # Carga el json de config y lo pasa a un dicc
+            data = json.load(config)
         return data
 
     def find_all(self) -> list:
@@ -85,7 +85,7 @@ class InterfaceRepository(Generic[T]):
     def query(self, query: dict) -> list:
         current_collection = self.data_base[self.collection]
         dataset = []
-        for document in current_collection.find(query): #igual que el find all, pero le pasamos el query que es un diccionario de un campo y un valor
+        for document in current_collection.find(query):
             document['_id'] = document['_id'].__str__()
             document = self.transform_object_ids(document)
             document = self.get_values_db_ref(document)
@@ -147,7 +147,6 @@ class InterfaceRepository(Generic[T]):
                 temp = item.__str__()
                 processed_list.append(temp)
         if len(processed_list) == 0:
-            #if not processed_list, es otra forma de decir
             processed_list = list_
         return processed_list
 

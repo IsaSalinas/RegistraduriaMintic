@@ -11,7 +11,6 @@ class VoteController:
         """
         Constructor of the VoteController class
         """
-        print("Vote controller ready...")
         self.vote_repository = VoteRepository()
         self.table_repository = TableRepository()
         self.candidate_Repository = CandidateRepository()
@@ -21,7 +20,7 @@ class VoteController:
         This method gets all the votes into the DB
         :return: Vote's list
         """
-        print("Get all")
+
         return self.vote_repository.find_all()
 
     def show(self, id_: str) -> dict:
@@ -30,7 +29,6 @@ class VoteController:
         :param id_:
         :return:
         """
-        print("Show by id")
         return self.vote_repository.find_by_id(id_)
 
     def get_by_candidate(self, candidate_id: str) -> list:
@@ -65,8 +63,6 @@ class VoteController:
         :param vote_:
         :return:
         """
-
-        print("Insert")
         vote = Vote(vote_)
         candidate_dict = self.candidate_repository.find_by_id(candidate_id)
         candidate_obj = Candidate(candidate_dict)
@@ -83,7 +79,6 @@ class VoteController:
         :param vote_:
         :return:
         """
-        print("Update by id")
         vote = Vote(vote_)
         return self.vote_repository.update(id_, vote)
 
@@ -96,5 +91,4 @@ class VoteController:
         :param id_:
         :return:
         """
-        print("Delete by id")
         return self.vote_repository.delete(id_)

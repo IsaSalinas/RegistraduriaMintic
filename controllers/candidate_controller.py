@@ -18,7 +18,6 @@ class CandidateController:
         This method gets all the candidates into the DB
         :return: Candidate's list
         """
-        print("Get all")
         return self.candidate_repository.find_all()
 
     def show(self, id_: str) -> dict:
@@ -26,7 +25,6 @@ class CandidateController:
         :param id_:
         :return:
         """
-        print("Show by id")
         return self.candidate_repository.find_by_id(id_)
 
     def create(self, candidate_: dict) -> dict:
@@ -34,8 +32,6 @@ class CandidateController:
         :param candidate_:
         :return:
         """
-
-        print("Insert")
         candidate = Candidate(candidate_)
         return self.candidate_repository.save(candidate)
 
@@ -45,7 +41,6 @@ class CandidateController:
         :param candidate_:
         :return:
         """
-        print("Update by id")
         candidate = Candidate(candidate_)
         return self.candidate_repository.update(id_, candidate)
 
@@ -54,7 +49,6 @@ class CandidateController:
         :param id_:
         :return:
         """
-        print("Delete by id")
         return self.candidate_repository.delete(id_)
 
     def political_party_assign(self, candidate_id: str, political_party_id: str) -> dict:

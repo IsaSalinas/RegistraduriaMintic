@@ -15,7 +15,6 @@ class PoliticalPartyController:
         This method gets all the political parties into the DB
         :return: Political party's list
         """
-        print("Get all")
         return self.political_party_repository.find_all()
 
     def show(self, id_: str) -> dict:
@@ -24,7 +23,6 @@ class PoliticalPartyController:
         :param id_:
         :return:
         """
-        print("Show by id")
         return self.political_party_repository.find_by_id(id_)
 
     def create(self, political_party_: dict) -> dict:
@@ -32,8 +30,6 @@ class PoliticalPartyController:
         :param political_party_:
         :return:
         """
-
-        print("Insert")
         political_party = PoliticalParty(political_party_)
         return self.political_party_repository.save(political_party)
 
@@ -43,7 +39,6 @@ class PoliticalPartyController:
         :param political_party_:
         :return:
         """
-        print("Update by id")
         political_party = PoliticalParty(political_party_)
         return self.political_party_repository.update(id_, political_party)
 
@@ -52,5 +47,4 @@ class PoliticalPartyController:
         :param id_:
         :return:
         """
-        print("Delete by id")
         return self.political_party_repository.delete(id_)

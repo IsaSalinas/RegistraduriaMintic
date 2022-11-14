@@ -6,7 +6,6 @@ class TableController:
         """
         Constructor of the TableController class
         """
-        print("Table controller ready...")
         self.table_repository = TableRepository()
 
     def index(self) -> list:
@@ -14,7 +13,6 @@ class TableController:
         This method gets all the tables into the DB
         :return: Table's list
         """
-        print("Get all")
         return self.table_repository.find_all()
 
     def show(self, id_: str) -> dict:
@@ -22,7 +20,6 @@ class TableController:
         :param id_:
         :return:
         """
-        print("Show by id")
         return self.table_repository.find_by_id(id_)
 
     def create(self, table_: dict) -> dict:
@@ -31,7 +28,6 @@ class TableController:
         :return:
         """
 
-        print("Insert")
         table = Table(table_)
         return self.table_repository.save(table)
 
@@ -41,7 +37,6 @@ class TableController:
         :param table_:
         :return:
         """
-        print("Update by id")
         table = Table(table_)
         return self.table_repository.update(id_, table)
 
@@ -50,7 +45,5 @@ class TableController:
         :param id_:
         :return:
         """
-        print("Delete by id")
         return self.table_repository.delete(id_)
 
-        return self.table_repository.delete(id_)
