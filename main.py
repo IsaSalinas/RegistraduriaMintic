@@ -1,6 +1,6 @@
 import json
 from flask import Flask
-from flask import jsonify # coge un dicc y lo pasa a json
+from flask import jsonify
 from flask_cors import CORS
 from waitress import serve
 
@@ -31,9 +31,9 @@ def load_file_config():
         data = json.load(config)
     return data
 
-     #Variable interna que hace referencia al nombre del proyecto
+
 if __name__ == '__main__':
-    data_config = load_file_config() #Guarda lo que retorna la funcion, la version en diccionario del Json
+    data_config = load_file_config()
     print("Server running: http://" + data_config.get('url-backend') + ":" + str(data_config.get('port')))
     serve(regisApp, host=data_config.get('url-backend'), port=data_config.get('port'))
 

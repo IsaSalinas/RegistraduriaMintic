@@ -1,14 +1,14 @@
 from bson import ObjectId
-
 from models.vote import Vote
 from repositories.interface_repository import InterfaceRepository
 
 
 class VoteRepository(InterfaceRepository[Vote]):
+
     #Verificar parametros
     def get_votes_in_table(self, table_id: str) -> list:
         """
-
+        show a list of votes per table
         :param table_id:
         :return:
         """
@@ -17,7 +17,7 @@ class VoteRepository(InterfaceRepository[Vote]):
 
     def get_votes_in_candidate(self, candidate_id: str) -> list:
         """
-
+        show a list of votes per candidate
         :param candidate_id:
         :return:
         """
@@ -26,7 +26,7 @@ class VoteRepository(InterfaceRepository[Vote]):
 
     def get_votes_in_political_party(self, political_party_id: str) -> list:
         """
-
+        show a list of votes per political_party
         :param political_party_id:
         :return:
         """

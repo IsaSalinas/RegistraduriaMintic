@@ -1,6 +1,7 @@
 from models.table import Table
 from repositories.table_repository import TableRepository
 
+
 class TableController:
     def __init__(self):
         """
@@ -40,7 +41,7 @@ class TableController:
         table = Table(table_)
         return self.table_repository.update(id_, table)
 
-    def delete(self, id_: str, ) -> str:
+    def delete(self, id_: str, ) -> dict:
         """
         :param id_:
         :return:

@@ -9,7 +9,6 @@ class CandidateController:
         """
         Constructor of the CandidateController class
         """
-        print("Candidate controller ready...")
         self.candidate_repository = CandidateRepository()
         self.political_party_repository = PoliticalPartyRepository()
 
@@ -44,7 +43,7 @@ class CandidateController:
         candidate = Candidate(candidate_)
         return self.candidate_repository.update(id_, candidate)
 
-    def delete (self, id_: str ,) -> str:
+    def delete (self, id_: str ,) -> dict:
         """
         :param id_:
         :return:

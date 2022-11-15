@@ -47,7 +47,7 @@ class InterfaceRepository(Generic[T]):
             document = {}
         return document
 
-    def save(self, item: T) -> T:
+    def save(self, item: T) -> dict:
         current_collection = self.data_base[self.collection]
         item = self.transform_refs(item)
         if hasattr(item, '_id') and item._id != "":
@@ -113,7 +113,7 @@ class InterfaceRepository(Generic[T]):
                 document_ref['_id'] = document_ref['_id'].__str__()
                 document[key] = document_ref
                 document[key] = self.get_values_db_ref(document[key])
-            elif isinstance(value, list) and len (value) > 0:
+            elif isinstance(value, list) and len(value) > 0:
                 document[key] = self.get_values_db_ref_from_list(value)
             elif isinstance(value, dict):
                 document[key] = self.get_values_db_ref(value)

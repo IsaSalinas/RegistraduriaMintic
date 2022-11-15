@@ -7,7 +7,6 @@ class PoliticalPartyController:
         """
         Constructor of the PoliticalPartyController class
         """
-        print("Political party controller ready...")
         self.political_party_repository = PoliticalPartyRepository()
 
     def index(self) -> list:
@@ -42,7 +41,7 @@ class PoliticalPartyController:
         political_party = PoliticalParty(political_party_)
         return self.political_party_repository.update(id_, political_party)
 
-    def delete(self, id_: str, ) -> str:
+    def delete(self, id_: str, ) -> dict:
         """
         :param id_:
         :return:
