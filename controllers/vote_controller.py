@@ -13,7 +13,7 @@ class VoteController:
         """
         self.vote_repository = VoteRepository()
         self.table_repository = TableRepository()
-        self.candidate_Repository = CandidateRepository()
+        self.candidate_repository = CandidateRepository()
 
     def index(self) -> list:
         """

@@ -19,6 +19,7 @@ regisApp.register_blueprint(vote_blueprints)
 regisApp.register_blueprint(table_blueprints)
 regisApp.register_blueprint(report_blueprints)
 
+
 @regisApp.route("/", methods=['GET'])
 def home():
     response = {"message": "Welcome to Registraduria MINTIC"}
@@ -36,4 +37,3 @@ if __name__ == '__main__':
     data_config = load_file_config()
     print("Server running: http://" + data_config.get('url-backend') + ":" + str(data_config.get('port')))
     serve(regisApp, host=data_config.get('url-backend'), port=data_config.get('port'))
-

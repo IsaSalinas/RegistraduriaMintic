@@ -2,9 +2,10 @@ import json
 import certifi
 import pymongo
 from bson import ObjectId, DBRef
-from typing import Generic, TypeVar, get_args, get_origin
+from typing import Generic, TypeVar, get_args
 
 T = TypeVar('T')
+
 
 # TODO add dta validations and error control
 class InterfaceRepository(Generic[T]):
@@ -35,11 +36,10 @@ class InterfaceRepository(Generic[T]):
             dataset.append(document)
         return dataset
 
-
-    def find_by_id(self, id_:str) ->dict:
+    def find_by_id(self, id_: str) -> dict:
         current_collection = self.data_base[self.collection]
         _id = ObjectId(id_)
-        document = current_collection.find_one({'_id' : _id})
+        document = current_collection.find_one({'_id': _id})
         document = self.get_values_db_ref(document)
         if document:
             document['_id'] = document['_id'].__str__()
@@ -110,7 +110,9 @@ class InterfaceRepository(Generic[T]):
                 collection_ref = self.data_base[value.collection]
                 _id = ObjectId(value.id)
                 document_ref = collection_ref.find_one({'_id': _id})
+                print(document_ref)
                 document_ref['_id'] = document_ref['_id'].__str__()
+                print(document_ref['_id'])
                 document[key] = document_ref
                 document[key] = self.get_values_db_ref(document[key])
             elif isinstance(value, list) and len(value) > 0:
