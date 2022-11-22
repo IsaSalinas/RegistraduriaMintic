@@ -110,9 +110,7 @@ class InterfaceRepository(Generic[T]):
                 collection_ref = self.data_base[value.collection]
                 _id = ObjectId(value.id)
                 document_ref = collection_ref.find_one({'_id': _id})
-                print(document_ref)
                 document_ref['_id'] = document_ref['_id'].__str__()
-                print(document_ref['_id'])
                 document[key] = document_ref
                 document[key] = self.get_values_db_ref(document[key])
             elif isinstance(value, list) and len(value) > 0:
