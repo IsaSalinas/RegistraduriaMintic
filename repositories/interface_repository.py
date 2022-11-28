@@ -135,7 +135,7 @@ class InterfaceRepository(Generic[T]):
             value = document.get(key)
             if isinstance(value, ObjectId):
                 document[key] = document[key].__str__()
-            elif isinstance(value, list) and len(value) > 0:
+            elif isinstance(value, list):
                 document[key] = self.format_list(value)
             elif isinstance(value, dict):
                 document[key] = self.transform_object_ids(value)
